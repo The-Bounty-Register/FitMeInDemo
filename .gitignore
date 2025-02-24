@@ -1,23 +1,23 @@
 # See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
 
 # dependencies
-/node_modules
-/.pnp
-.pnp.js
+/fitmein-demo/node_modules
+/fitmein-demo/.pnp
+/fitmein-demo/.pnp.js
 
 # testing
-/coverage
+/fitmein-demo/coverage
 
 # production
-/build
+/fitmein-demo/build
 
 # misc
-.DS_Store
-.env.local
-.env.development.local
-.env.test.local
-.env.production.local
+/fitmein-demo/.DS_Store
+/fitmein-demo/.env.local
+/fitmein-demo/.env.development.local
+/fitmein-demo/.env.test.local
+/fitmein-demo/.env.production.local
 
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
+/fitmein-demo/npm-debug.log*
+/fitmein-demo/yarn-debug.log*
+/fitmein-demo/yarn-error.log*
