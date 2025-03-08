@@ -8,7 +8,7 @@ export function BottomNav() {
   
   const navItems = [
     { icon: Dumbbell, label: "FitMeIn", path: "/fitmein" },
-    { icon: ShoppingBag, label: "Shop", path: "/shop" },
+    // { icon: ShoppingBag, label: "Shop", path: "/shop" },
     { icon: User, label: "Profile", path: "/profile" },
   ];
 
