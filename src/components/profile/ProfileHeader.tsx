@@ -1,7 +1,5 @@
 
-import { Button } from "@/components/ui/button";
-import { LogOut, Trophy, User } from "lucide-react";
-import { useAuth } from "@/contexts/AuthContext";
+import { Trophy, User } from "lucide-react";
 
 interface ProfileHeaderProps {
   name: string;
@@ -9,26 +7,15 @@ interface ProfileHeaderProps {
 }
 
 export const ProfileHeader = ({ name, workoutScore }: ProfileHeaderProps) => {
-  const { logout } = useAuth();
-  
   return (
     <>
-      <header className="space-y-2 mb-4 flex justify-between items-start">
+      <header className="space-y-2 mb-4">
         <div>
           <h1 className="text-2xl font-bold tracking-tight text-white">Profile</h1>
           <p className="text-[#BBBBBB]">
             Manage your account and preferences
           </p>
         </div>
-        <Button 
-          variant="ghost" 
-          size="sm" 
-          onClick={logout}
-          className="text-[#BBBBBB] hover:text-white hover:bg-[#333333]"
-        >
-          <LogOut className="w-4 h-4 mr-2" />
-          Logout
-        </Button>
       </header>
       
       {/* User Profile */}

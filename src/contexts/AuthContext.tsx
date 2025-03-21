@@ -7,26 +7,28 @@ interface AuthContextType {
   isAuthenticated: boolean;
   login: (memberCode: string) => void;
   logout: () => void;
+  isLoggingOut: boolean;
 }
 
 const AuthContext = createContext<AuthContextType | null>(null);
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [isLoggingOut, setIsLoggingOut] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();
   const { toast } = useToast();
 
-  // Check if user is already authenticated when the app loads
+  // This effect handles navigation when auth state changes
+  // but we prevent it from running during logout to avoid double redirects
   useEffect(() => {
-    // If not on login page and not authenticated, redirect to login
-    if (!isAuthenticated && location.pathname !== "/login") {
-      navigate("/login");
+    // Skip this effect during logout process or if already on login page
+    if (!isAuthenticated && !isLoggingOut && location.pathname !== "/login") {
+      navigate("/login", { replace: true });
     }
-  }, [isAuthenticated, location.pathname, navigate]);
+  }, [isAuthenticated, isLoggingOut, location.pathname, navigate]);
 
   const login = (memberCode: string) => {
-    // In a real app, this would validate against a backend
     if (memberCode.length === 6 && !isNaN(Number(memberCode))) {
       setIsAuthenticated(true);
       toast({
@@ -34,9 +36,10 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         description: "Successfully logged in",
       });
       
-      // Get the redirect path or default to home page
       const from = location.state?.from?.pathname || "/";
-      navigate(from); // Navigate to the intended page after login
+      const redirectState = location.state?.redirectState;
+      
+      navigate(from, { state: redirectState });
     } else {
       toast({
         title: "Invalid code",
@@ -47,12 +50,21 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   };
 
   const logout = () => {
+    // Set logging out state to prevent redirect loop
+    setIsLoggingOut(true);
+    
+    // Use a single navigation with state change
     setIsAuthenticated(false);
-    navigate("/login");
+    navigate("/login", { replace: true });
+    
+    // Clear the logging out state after animation completes
+    setTimeout(() => {
+      setIsLoggingOut(false);
+    }, 300); // Reduced timeout to match animation duration
   };
 
   return (
-    <AuthContext.Provider value={{ isAuthenticated, login, logout }}>
+    <AuthContext.Provider value={{ isAuthenticated, login, logout, isLoggingOut }}>
       {children}
     </AuthContext.Provider>
   );

@@ -1,18 +1,15 @@
 
-import { Calendar, Dumbbell, MapPin, ThumbsDown } from "lucide-react";
+import { useEffect, useState } from "react";
+import { Dumbbell, LogOut, MapPin, ThumbsDown, Calendar } from "lucide-react";
 import { CollapsibleCard } from "./CollapsibleCard";
+import { Button } from "@/components/ui/button";
+import { useAuth } from "@/contexts/AuthContext";
+import { getAllBookings, Booking } from "@/data/bookingsDatabase";
 
 interface Workout {
   id: number;
   date: string;
   duration: string;
-  location: string;
-}
-
-interface Booking {
-  id: number;
-  date: string;
-  time: string;
   location: string;
 }
 
@@ -24,21 +21,37 @@ interface Penalty {
 }
 
 interface ProfileSectionsProps {
-  upcomingBookings: Booking[];
   pastWorkouts: Workout[];
   gyms: string[];
   penalties: Penalty[];
+  upcomingBookings?: Booking[]; // Add upcomingBookings as an optional prop
 }
 
 export const ProfileSections = ({ 
-  upcomingBookings, 
   pastWorkouts, 
   gyms, 
-  penalties 
+  penalties,
+  upcomingBookings: propUpcomingBookings
 }: ProfileSectionsProps) => {
+  const { logout } = useAuth();
+  const [upcomingBookings, setUpcomingBookings] = useState<Booking[]>([]);
+  
+  // Load bookings from database
+  useEffect(() => {
+    try {
+      // Get user bookings from database
+      const userBookings = getAllBookings();
+      console.log("Profile - loaded bookings:", userBookings);
+      
+      setUpcomingBookings(userBookings);
+    } catch (error) {
+      console.error("Error loading bookings in profile:", error);
+    }
+  }, []);
+  
   return (
     <>
-      {/* Upcoming Bookings */}
+      {/* Upcoming Bookings Section */}
       <CollapsibleCard 
         title="Upcoming Bookings" 
         icon={<Calendar className="w-5 h-5 mr-0 text-[#1EAEDB]" />}
@@ -116,6 +129,16 @@ export const ProfileSections = ({
           <p className="text-[#BBBBBB] text-sm">No penalties</p>
         )}
       </CollapsibleCard>
+      
+      {/* Logout Button right after Penalties section */}
+      <Button 
+        variant="destructive" 
+        className="w-full mt-6"
+        onClick={logout}
+      >
+        <LogOut className="w-4 h-4 mr-2" />
+        Logout
+      </Button>
     </>
   );
-};
+}

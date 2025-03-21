@@ -6,7 +6,7 @@ import { userData } from "@/data/profileData";
 
 export default function Profile() {
   return (
-    <MobileLayout frameColor="#222">
+    <MobileLayout frameColor="#000000">
       <main className="p-6 space-y-6 bg-[#1A1A1A]">
         <ProfileHeader 
           name={userData.name} 

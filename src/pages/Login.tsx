@@ -25,7 +25,26 @@ export default function Login() {
               Enter your member code to continue
             </CardDescription>
           </CardHeader>
-          <CardContent>
+          <CardContent className="space-y-6">
+            {/* QR Code Section */}
+            <div className="flex flex-col items-center space-y-3 pb-2">
+              <img 
+                src="/lovable-uploads/9104fc23-0151-4ebc-9a0a-d2da0b519608.png" 
+                alt="QR Code" 
+                className="w-48 h-48 rounded-lg border-2 border-[#333333] bg-white p-2"
+              />
+              <p className="text-sm text-[#BBBBBB] text-center">Use above to enter the gym</p>
+            </div>
+            
+            <div className="relative">
+              <div className="absolute inset-0 flex items-center">
+                <span className="w-full border-t border-[#333333]"></span>
+              </div>
+              <div className="relative flex justify-center text-xs">
+                <span className="bg-[#1A1A1A] px-2 text-[#888888]">OR ENTER CODE MANUALLY</span>
+              </div>
+            </div>
+            
             <form onSubmit={handleSubmit} className="space-y-4">
               <div className="space-y-2">
                 <Input

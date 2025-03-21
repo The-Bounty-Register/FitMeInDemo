@@ -16,12 +16,12 @@ export const CollapsibleCard = ({ title, icon, children }: CollapsibleCardProps)
   return (
     <Card className="bg-[#222222] border border-[#333333] shadow-sm rounded-xl">
       <CardHeader 
-        className="pb-2 cursor-pointer"
+        className="pb-2 cursor-pointer py-3"
         onClick={() => setIsOpen(!isOpen)}
       >
-        <CardTitle className="text-lg flex items-center justify-between text-white">
+        <CardTitle className="text-base flex items-center justify-between text-white">
           <div className="flex items-center">
-            {icon}
+            <span className="flex items-center justify-center">{icon}</span>
             <span className="ml-2">{title}</span>
           </div>
           {isOpen ? (

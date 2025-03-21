@@ -2,6 +2,7 @@
 import { Dumbbell, User, Calendar } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Link, useLocation } from "react-router-dom";
+import { motion } from "framer-motion";
 
 export function BottomNav() {
   const location = useLocation();
@@ -21,7 +22,7 @@ export function BottomNav() {
             key={path}
             to={path}
             className={cn(
-              "flex flex-col items-center justify-center space-y-1 transition-colors",
+              "flex flex-col items-center justify-center space-y-1 transition-colors relative",
               isActive
                 ? "text-[#1EAEDB]" // Active item is blue
                 : "text-[#DDDDDD] hover:text-[#33C3F0]" // Light text with blue hover
@@ -29,6 +30,13 @@ export function BottomNav() {
           >
             <Icon size={20} />
             <span className="text-xs font-medium">{label}</span>
+            {isActive && (
+              <motion.div
+                layoutId="activeTab"
+                className="absolute -bottom-4 w-6 h-1 bg-[#1EAEDB] rounded-full"
+                transition={{ type: "spring", stiffness: 300, damping: 30 }}
+              />
+            )}
           </Link>
         );
       })}

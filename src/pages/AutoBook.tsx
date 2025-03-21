@@ -3,7 +3,7 @@ import { MobileLayout } from "@/components/layout/MobileLayout";
 
 export default function AutoBook() {
   return (
-    <MobileLayout>
+    <MobileLayout frameColor="#000000">
       <main className="p-6 pb-24">
         <header className="space-y-2 mb-6">
           <h1 className="text-2xl font-bold tracking-tight text-white">Smart Booking</h1>

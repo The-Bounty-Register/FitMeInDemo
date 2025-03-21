@@ -6,7 +6,8 @@ import {
   DialogContent,
   DialogHeader,
   DialogTitle,
-  DialogFooter
+  DialogFooter,
+  DialogDescription
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { useMobileContainer } from "@/components/layout/MobileLayout";
@@ -21,7 +22,7 @@ export interface WorkoutMachine {
 interface WorkoutChainProps {
   workoutMachines: WorkoutMachine[];
   onRemoveMachine: (index: number) => void;
-  onCompleteWorkout?: () => void;
+  onCompleteWorkout?: (event: React.MouseEvent) => void;
   isComplete?: boolean;
 }
 
@@ -66,27 +67,28 @@ export function WorkoutChain({
           {workoutMachines.map((machine, index) => (
             <React.Fragment key={`${machine.id}-${index}`}>
               <div 
-                className="w-4 h-4 rounded-full bg-primary cursor-pointer flex items-center justify-center"
+                className="w-4 h-4 rounded-full bg-primary cursor-pointer flex items-center justify-center animate-fade-in"
                 onClick={() => handleDotClick(index)}
               >
                 {index === openMachineIndex && (
-                  <div className="w-2 h-2 rounded-full bg-white"></div>
+                  <div className="w-2 h-2 rounded-full bg-white animate-scale-in"></div>
                 )}
               </div>
               
               {index < workoutMachines.length - 1 && (
-                <div className="w-12 h-0.5 bg-primary"></div>
+                <div className="w-12 h-0.5 bg-primary origin-left animate-[scale-x_0.3s_ease-out] motion-safe:animate-[width_0.3s_ease-out]"></div>
               )}
             </React.Fragment>
           ))}
         </div>
       </div>
 
-      {isComplete && (
+      {workoutMachines.length > 0 && (
         <div className="flex justify-center mt-4">
           <Button 
             onClick={onCompleteWorkout}
             className="px-8"
+            type="button"
           >
             Complete Workout
           </Button>
@@ -101,6 +103,7 @@ export function WorkoutChain({
           >
             <DialogHeader>
               <DialogTitle className="text-white">{selectedMachine.name}</DialogTitle>
+              <DialogDescription className="text-gray-400">View machine details</DialogDescription>
             </DialogHeader>
             
             <div className="py-2">
