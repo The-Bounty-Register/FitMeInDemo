@@ -55,7 +55,7 @@ export default function Login() {
                     const value = e.target.value.replace(/\D/g, "").slice(0, 6);
                     setMemberCode(value);
                   }}
-                  className="text-center text-2xl tracking-widest bg-[#222222] border-[#333333] text-white"
+                  className="text-center text-sm tracking-widest bg-[#222222] border-[#333333] text-white"
                   maxLength={6}
                 />
               </div>
