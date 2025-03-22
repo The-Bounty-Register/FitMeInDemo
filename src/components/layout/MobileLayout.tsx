@@ -49,7 +49,7 @@ export function MobileLayout({
     <MobileLayoutContext.Provider value={{
       containerRef
     }}>
-      <div className="min-h-screen flex items-center justify-center p-4 bg-[#121212]/0 overflow-hidden">
+      <div className="min-h-screen flex items-center justify-center p-4 bg-[#121212]/0 overflow-hidden mainPageCSSMagic">
         {/* Add Slideshow as background */}
         <Slideshow />
         <div className={cn(
