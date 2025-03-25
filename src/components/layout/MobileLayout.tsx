@@ -22,28 +22,32 @@ interface MobileLayoutProps {
   className?: string;
   frameColor?: string;
   showNav?: boolean; // Add optional prop to control nav visibility
+  forceScroll?: boolean; // Add optional prop to force scrolling
 }
 
 export function MobileLayout({
   children,
   className,
   frameColor = "#000000", // Changed from #222 to pure black
-  showNav = true // Default to showing nav
+  showNav = true, // Default to showing nav
+  forceScroll = false // Default to respecting overflow settings
 }: MobileLayoutProps) {
   const containerRef = useRef<HTMLDivElement>(null);
 
   // Prevent body scrolling when component mounts
   useEffect(() => {
-    // Save original styles
-    const originalStyle = window.getComputedStyle(document.body).overflow;
-    // Prevent scrolling on the body
-    document.body.style.overflow = 'hidden';
-    
-    // Restore original styles when component unmounts
-    return () => {
-      document.body.style.overflow = originalStyle;
-    };
-  }, []);
+    if (!forceScroll) {
+      // Save original styles
+      const originalStyle = window.getComputedStyle(document.body).overflow;
+      // Prevent scrolling on the body
+      document.body.style.overflow = 'hidden';
+      
+      // Restore original styles when component unmounts
+      return () => {
+        document.body.style.overflow = originalStyle;
+      };
+    }
+  }, [forceScroll]);
 
   return (
     <MobileLayoutContext.Provider value={{

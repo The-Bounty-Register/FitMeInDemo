@@ -5,6 +5,14 @@ export interface Booking {
   date: string;
   time: string;
   location: string;
+  machines: {
+    machine: string;
+    description: string;
+    sets: number;
+    reps: string;
+    startTime: string;
+    endTime: string;
+  }[];
 }
 
 // Function to get all bookings

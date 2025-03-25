@@ -13,6 +13,8 @@ import { toast } from "sonner";
 import { SearchBar } from "@/components/machines/SearchBar";
 import { MachineList } from "@/components/machines/MachineList";
 import { ManualBookHeader } from "@/components/machines/ManualBookHeader";
+import { addBooking } from "@/data/bookingsDatabase";
+import { format } from "date-fns";
 
 export default function ManualBook() {
   const navigate = useNavigate();
@@ -98,20 +100,48 @@ export default function ManualBook() {
   const handleCompleteWorkout = (event: React.MouseEvent) => {
     event.preventDefault();
     
-    console.log("Completing workout and navigating to thank you page");
+    // Format the date as a readable string
+    const formattedDate = format(selectedDate, "MMMM d, yyyy");
     
-    const bookingData = {
-      date: selectedDate,
-      startTime: startTime,
-      endTime: endTime,
-      machineCount: workoutMachines.length
+    // Create an array of machine data for the booking
+    const machineData = workoutMachines.map(machine => {
+      // Find the full machine details
+      const fullMachine = gymMachines.find(m => m.id === machine.id);
+      
+      return {
+        machine: machine.name,
+        description: fullMachine?.description || "Workout machine",
+        sets: 3, // Default value
+        reps: "10-12", // Default value
+        startTime: machine.startTime,
+        endTime: machine.endTime
+      };
+    });
+    
+    // Create the booking object
+    const booking = {
+      id: Date.now(), // Using timestamp as ID
+      date: formattedDate,
+      time: `${startTime} - ${endTime}`,
+      location: "Smart Workout",
+      machines: machineData
     };
+    
+    // Save the booking to the database
+    addBooking(booking);
     
     toast.success(`Your workout with ${workoutMachines.length} machines has been scheduled`, {
       icon: <Check className="h-5 w-5 text-white" />,
     });
     
-    navigate("/thank-you", { state: bookingData });
+    navigate("/thank-you", { 
+      state: {
+        date: selectedDate,
+        startTime: startTime,
+        endTime: endTime,
+        machineCount: workoutMachines.length
+      }
+    });
   };
   
   return (

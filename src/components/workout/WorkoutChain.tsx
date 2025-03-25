@@ -11,25 +11,31 @@ import {
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { useMobileContainer } from "@/components/layout/MobileLayout";
+import { Switch } from "@/components/ui/switch";
 
 export interface WorkoutMachine {
   id: number;
   name: string;
   startTime: string;
   endTime: string;
+  replaced?: boolean;
 }
 
 interface WorkoutChainProps {
   workoutMachines: WorkoutMachine[];
   onRemoveMachine: (index: number) => void;
+  onReplaceExercise?: (index: number) => void;
   onCompleteWorkout?: (event: React.MouseEvent) => void;
+  hasReplacements?: boolean;
   isComplete?: boolean;
 }
 
 export function WorkoutChain({
   workoutMachines,
   onRemoveMachine,
+  onReplaceExercise,
   onCompleteWorkout,
+  hasReplacements = false,
   isComplete = false
 }: WorkoutChainProps) {
   const [openMachineIndex, setOpenMachineIndex] = React.useState<number | null>(null);
@@ -46,6 +52,13 @@ export function WorkoutChain({
   const handleRemove = () => {
     if (openMachineIndex !== null) {
       onRemoveMachine(openMachineIndex);
+      setOpenMachineIndex(null);
+    }
+  };
+
+  const handleReplace = () => {
+    if (openMachineIndex !== null && onReplaceExercise) {
+      onReplaceExercise(openMachineIndex);
       setOpenMachineIndex(null);
     }
   };
@@ -67,7 +80,7 @@ export function WorkoutChain({
           {workoutMachines.map((machine, index) => (
             <React.Fragment key={`${machine.id}-${index}`}>
               <div 
-                className="w-4 h-4 rounded-full bg-primary cursor-pointer flex items-center justify-center animate-fade-in"
+                className={`w-4 h-4 rounded-full ${machine.replaced ? 'bg-destructive' : 'bg-primary'} cursor-pointer flex items-center justify-center animate-fade-in`}
                 onClick={() => handleDotClick(index)}
               >
                 {index === openMachineIndex && (
@@ -76,7 +89,7 @@ export function WorkoutChain({
               </div>
               
               {index < workoutMachines.length - 1 && (
-                <div className="w-12 h-0.5 bg-primary origin-left animate-[scale-x_0.3s_ease-out] motion-safe:animate-[width_0.3s_ease-out]"></div>
+                <div className={`w-12 h-0.5 ${machine.replaced || workoutMachines[index + 1].replaced ? 'bg-destructive' : 'bg-primary'} origin-left animate-[scale-x_0.3s_ease-out] motion-safe:animate-[width_0.3s_ease-out]`}></div>
               )}
             </React.Fragment>
           ))}
@@ -87,10 +100,10 @@ export function WorkoutChain({
         <div className="flex justify-center mt-4">
           <Button 
             onClick={onCompleteWorkout}
-            className="px-8"
+            className={`px-8 ${hasReplacements ? 'bg-destructive hover:bg-destructive/90' : ''}`}
             type="button"
           >
-            Complete Workout
+            {hasReplacements ? "Redo My Workout" : "Complete Workout"}
           </Button>
         </div>
       )}
@@ -128,7 +141,16 @@ export function WorkoutChain({
               </div>
             </div>
             
-            <DialogFooter>
+            <DialogFooter className="space-x-2">
+              {onReplaceExercise && (
+                <Button 
+                  variant="outline"
+                  className={`${selectedMachine.replaced ? 'bg-destructive text-white hover:bg-destructive/90' : 'bg-[#2A2A2A] border-[#3A3A3A] text-white'}`}
+                  onClick={handleReplace}
+                >
+                  {selectedMachine.replaced ? "Undo Replacement" : "Replace Exercise"}
+                </Button>
+              )}
               <Button 
                 variant="outline" 
                 className="bg-[#2A2A2A] border-[#3A3A3A] text-white"
